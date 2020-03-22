@@ -202,7 +202,7 @@ updateScreen = (key, data) => {
             }
         })
     } else {
-        /* Clickeando un segundo y + filtro */ 
+        /* Clickeando un segundo y + filtro */
         let secondArr
         switch (keyString) {
             case 'role':
@@ -276,7 +276,7 @@ printData = (jobs) => {
          </ul>
       </div>
                 `
-/* Agrego los Li filstro para seleccion y sus eventos Listeners a los Posts */
+        /* Agrego los Li filstro para seleccion y sus eventos Listeners a los Posts */
         container.appendChild(div)
 
         let liRole = document.createElement('li')
@@ -288,17 +288,20 @@ printData = (jobs) => {
         document.querySelector(`#N${job.id}`).appendChild(liRole)
 
         let liLevel = document.createElement('li')
-       // liLevel.innerHTML = `<li data-level=${job.level} class="item__require"> ${job.level} </li>`
-           liLevel.dataset.level = `${job.level}`
-           liLevel.classList.add("item__require")
-           liLevel.innerHTML = `${job.level}`
+        // liLevel.innerHTML = `<li data-level=${job.level} class="item__require"> ${job.level} </li>`
+        liLevel.dataset.level = `${job.level}`
+        liLevel.classList.add("item__require")
+        liLevel.innerHTML = `${job.level}`
         addEventListenerLi(liLevel)
         document.querySelector(`#N${job.id}`).appendChild(liLevel)
 
         if (job.languages && job.languages.length > 0) {
             job.languages.forEach(language => {
                 let lilanguage = document.createElement('li')
-                lilanguage.innerHTML = `<li data-languages=${language} class="item__require"> ${language}  </li>`
+                lilanguage.dataset.languages = `${language}`
+                lilanguage.classList.add("item__require")
+                lilanguage.innerHTML = `${language}`
+                //   lilanguage.innerHTML = `<li data-languages=${language} class="item__require"> ${language}  </li>`
                 addEventListenerLi(lilanguage)
                 document.querySelector(`#N${job.id}`).appendChild(lilanguage)
             })
@@ -306,7 +309,10 @@ printData = (jobs) => {
         if (job.tools && job.tools.length > 0) {
             job.tools.forEach(tool => {
                 let liTool = document.createElement('li')
-                liTool.innerHTML = `<li data-tools=${tool} class="item__require">${tool}  </li>`
+                liTool.dataset.tools = `${tool}`
+                liTool.classList.add("item__require")
+                li.innerHTML = `${tool}`
+                //liTool.innerHTML = `<li data-tools=${tool} class="item__require">${tool}  </li>`
                 addEventListenerLi(liTool)
                 document.querySelector(`#N${job.id}`).appendChild(liTool)
             })
