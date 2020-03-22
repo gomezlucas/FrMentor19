@@ -257,19 +257,19 @@ printData = (jobs) => {
           <img src="${job.img}" alt="company logo">
         </div>
         <div class="item__description">
-          <span class="item__header">
+          <div class="item__header">
             <h2 class="item__company">${job.company} </h2>
              ${ job.isItNew ? '<p class="item__new"> new!</p>' : ''}
             ${job.isItFeatured ? '<p class="item__featured">featured</p>' : ''}
-          </span>
+          </div>
           <h1 class="item__position"> <a href="#">Senior Frontend Developer</a></h1>
-          <span class="item__footer">
+          <div class="item__footer">
             <p> ${job.timeStamp}</p>
-            <span class="item__circle"></span>
+            <div class="item__circle"></div>
             <p> ${job.hours} </p>
-            <span class="item__circle"></span>
+            <div class="item__circle"></div>
             <p>${job.location} </p>
-          </span>
+          </div>
         </div>
         <ul class="item__requirements" id="N${job.id}">
 
