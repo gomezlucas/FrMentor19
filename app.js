@@ -280,12 +280,18 @@ printData = (jobs) => {
         container.appendChild(div)
 
         let liRole = document.createElement('li')
-        liRole.innerHTML = `<li data-role=${job.role} class="item__require"> ${job.role}  </li>`
+        //liRole.innerHTML = `<li data-role=${job.role} class="item__require"> ${job.role}  </li>`
+        liRole.dataset.role = `${job.role}`
+        liRole.classList.add("item__require")
+        liRole.innerHTML = `${job.role}`
         addEventListenerLi(liRole)
         document.querySelector(`#N${job.id}`).appendChild(liRole)
 
         let liLevel = document.createElement('li')
-        liLevel.innerHTML = `<li data-level=${job.level} class="item__require"> ${job.level} </li>`
+       // liLevel.innerHTML = `<li data-level=${job.level} class="item__require"> ${job.level} </li>`
+           liLevel.dataset.level = `${job.level}`
+           liLevel.classList.add("item__require")
+           liLevel.innerHTML = `${job.level}`
         addEventListenerLi(liLevel)
         document.querySelector(`#N${job.id}`).appendChild(liLevel)
 
