@@ -328,7 +328,7 @@ main {
 
   .item__description::after {
     content: " ";
-    width: 250px;
+    width: 90%;
     display: inline-block;
     border-bottom: 1px solid var(--darkGrayishCyan);
   }
