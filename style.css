@@ -343,6 +343,23 @@ main {
     max-width: 400px;  }
 }
 
-@media screen and (max-width: 494px) {
+@media screen and (max-width: 400px) {
+
+  .item__position {
+    font-size: 0.9rem;
+  }
+
+  .item__company{
+    font-size: 0.7rem;
+
+  }
+
+  .item__footer > p, .item__footer > div{
+    margin-right: 0.5rem;
+  }
+
+  .item__new, .item__featured{
+    font-size: 0.6rem;
+  }
 
 }
