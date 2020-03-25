@@ -7,11 +7,13 @@ El filtro selecciona 3 propiedades: rol del postulante, nivel de seniority y len
 Rol y nivel fueron declarados como variables dado que el post requería uno de ellos. En cambio, 
 lenguajes/seniority fue declarado en un array ya que cada post podía o no requerir más de uno. 
 
-Utilice high-order functions para facilitar el proceso de la información.  Un ejemplo de ello: gi
+Utilice high-order functions para facilitar el proceso de la información.  Un ejemplo de ello: 
+
 ```javascript 
 if (skillsArray.every(skill => post.skills.includes(skill))) {
               isSkillsRequested = true;
-        }```
+        };
+```
 
 En el mismo indico que si todas las skills seleccionadas coinciden con las skills incluidas en el post, guardo en una variable boolean True.
 
