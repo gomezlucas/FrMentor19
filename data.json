@@ -11,7 +11,8 @@
     "timeStamp": "1d ago",
     "hours": "FullTime",
     "location": "USA Only",
-    "languages": ["HTML", "CSS", "JavaScript"]
+    "languages": ["HTML", "CSS", "JavaScript"],
+    "tools":[]
   },
   {
     "id": 2,
@@ -55,7 +56,8 @@
     "timeStamp": "5d ago",
     "hours": "Contract",
     "location": "USA Only",
-    "languages": ["CSS", "JavaScript"]
+    "languages": ["CSS", "JavaScript"],
+    "tools": []
   },
   {
     "id": 5,
@@ -84,7 +86,8 @@
     "timeStamp": "2w ago",
     "hours": "Full Time",
     "location": "UK Only",
-    "tools": ["Ror"]
+    "tools": ["Ror"],
+    "languages": []
   },
   {
     "id": 7,
