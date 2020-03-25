@@ -1,19 +1,23 @@
 
-# Job Listings Web Site
+# Job Listings Web Site Frontend Mentor  by Lucas Gomez
 
-Por medio de este desarollo quise perfeccionar mis aptitudes de programación con JavaScript. Dado un conjunto de datos prueba, armé un Json con la información a destacar. 
+Por medio de este desarollo quise perfeccionar mis aptitudes de programación con JavaScript.
+Dado un conjunto de datos prueba, armé un Json con la información brindada. 
 El filtro selecciona 3 propiedades: rol del postulante, nivel de seniority y lenguajes / herramientas.
-Rol y nivel fueron declarados como variables dado que el post requería uno de ellos en específico. En cambio, 
+Rol y nivel fueron declarados como variables dado que el post requería uno de ellos. En cambio, 
 lenguajes/seniority fue declarado en un array ya que cada post podía o no requerir más de uno. 
-Utilice high-order functions para facilitar el proceso de la información: un ejemplo de ello puede ser 
->    if (skillsArray.every(skill => post.skills.includes(skill))) {
->                isSkillsRequested = true
-        }
+
+Utilice high-order functions para facilitar el proceso de la información.  Un ejemplo de ello: gi
+```javascript 
+if (skillsArray.every(skill => post.skills.includes(skill))) {
+              isSkillsRequested = true;
+        }```
+
 En el mismo indico que si todas las skills seleccionadas coinciden con las skills incluidas en el post, guardo en una variable boolean True.
 
 Por medio del challenge pude practicar mis habilidades con jsES07 y mejorar el flujo de la programación en mi código. 
 
-# Frontend Mentor -
+
 
 ![Design preview for the Job Listings coding challenge](./design/desktop-preview.jpg)
 
