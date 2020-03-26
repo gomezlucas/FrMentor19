@@ -3,20 +3,26 @@ let filterArray = []
 let filtertDiv = document.querySelector('.filter')
 let containerPostsDiv = document.querySelector('.container')
 let filterUl = document.querySelector('.filter__options')
-let jobPostArray = []
-let jobPostArrayFiltered = []
+let jobPostArray = [] //U: todos los job postings 
+let jobPostArrayFiltered = [] //U: los filtrados hasta ahora
 
 
-/* Luego de Cargar la pagina*/
-document.addEventListener("DOMContentLoaded", async function () {
+//CONSEJO: que las funciones se puedan probar desde la consola
+const appInit= async function () {
     const dataJson = './data.json'
     const JobPostResponseJson = await fetch(dataJson)
     const JobPostResponse = await JobPostResponseJson.json()
     jobPostArray = await formatJobPostResponse(JobPostResponse)
+		jobPostArrayFiltered = jobPostArray //A: inicialmente todos
     await showJobPosts(jobPostArray)
-});
+};
+
+/* Luego de Cargar la pagina*/
+document.addEventListener("DOMContentLoaded", appInit);
 
 
+
+//CONSEJO: si vas a declarar las funciones asi, la gente les pone const (aunque es un embole porque no las podes ir corrigiendo en la consola)
 
 /* Dentro del objeto: join de los Array languajes y tools,
 {... "languages": ["HTML", "JavaScript"], "tools": ["React"]  
@@ -24,25 +30,42 @@ document.addEventListener("DOMContentLoaded", async function () {
 */
 formatJobPostResponse = (jobPosts) => {
     jobPosts.forEach(job => {
+				/* CONSEJO: trata de que tus estructuras tengan ej. siempre un array (normaliza)
+ 				* o usa un default, lucha para que tu codigo sea legible :)
+ 				* Tambien podrias haber usado .concat de array con un if por key
+ 				* tipo
+
+ 				job.skills= []; //DFLT
+				['languages','tools'].forEach(k => {
+					if (job.hasOwnProperty(k)) {
+						job.skills= job.skills.concat(job[k]);
+					}
+				});
+
         if (job.hasOwnProperty('languages') && job.hasOwnProperty('tools')) {
             job.skills = [...job.languages, ...job.tools]
         } else if (job.hasOwnProperty('languages')) {
             job.skills = [...job.languages]
-
         } else if (job.hasOwnProperty('tools')) {
             job.skills = [...job.tools]
         } else {
             job.skills = []
         }
-        delete job.languages
+				*/
+				job.skills= [ ... (job.languages || []) , ... (job.tools || [])];
+
+        delete job.languages //CONSEJO: OjO con delete, googlea los efectos ...
         delete job.tools
     })
     return jobPosts
 
 }
 
-/* Funcion que renderiza la info al documento*/
-/*jobsPosts = [{
+/* Generar html para mostrar en el documento
+
+Los datos tiene este forma 
+
+jobsPosts = [{
 {
     "id": 1,
     "company": "Photosnap",
@@ -57,7 +80,9 @@ formatJobPostResponse = (jobPosts) => {
     "location": "USA Only",
     "skills": ["HTML", "CSS", "JavaScript"]
   },
-}]*/
+}]
+
+*/
 showJobPosts = (jobPosts) => {
     containerPostsDiv.innerHTML = ''
     jobPosts.map(job => {
@@ -102,26 +127,22 @@ showJobPosts = (jobPosts) => {
 }
 
 /* Agrega  Li con los filtros al Post  */
+//CONSEJO: si ves repetido, convertilo en funcion!
+createLi = (property, data, id) => {
+	li = document.createElement('li')
+	li.dataset[property] = `${data}`
+	li.classList.add("item__require")
+	li.innerHTML = `${data}`
+	addEventListenerPostLi(li)
+	document.querySelector(`#N${id}`).appendChild(li)
+}
+
 createPostLi = (property, data, id) => {
     let li = ''
-    if (property !== "skills") {
-        li = document.createElement('li')
-        li.dataset[property] = `${data}`
-        li.classList.add("item__require")
-        li.innerHTML = `${data}`
-        addEventListenerPostLi(li)
-        document.querySelector(`#N${id}`).appendChild(li)
+    if (property !== "skills") { 
+			createLi(property, data, id);
     } else {
-        if (data.length > 0) {
-            data.forEach(skill => {
-                li = document.createElement('li')
-                li.dataset[property] = `${skill}`
-                li.classList.add("item__require")
-                li.innerHTML = `${skill}`
-                addEventListenerPostLi(li)
-                document.querySelector(`#N${id}`).appendChild(li)
-            })
-        }
+      data.forEach(skill => createLi(property, skill, id))
     }
 }
 
@@ -136,7 +157,7 @@ addEventListenerPostLi = (li) => {
 
 updateFilterArray = (key, data) => {
     /*Verifico que el dato seleccionado no este repetido*/
-    if (filterArray.filter(value => value[key] === data).length === 0) {
+    if (filterArray.find(value => value[key] === data)==null) {
         const filterObject = { [key]: data }
         filtertDiv.classList.add('filter--show')
         filterArray.push(filterObject)
@@ -153,9 +174,10 @@ addEventListenerClear = (key, data) => {
         filtertDiv.classList.remove('filter--show')
         filterUl.innerHTML = ''
         filterArray.length = 0
+        //     CONSEJO: si usas git, no dejes codigo muerto ... lo podes recuperar del history
         //     jobPostArray.length = 0
-        jobPostArrayFiltered.length = 0
-        showJobPosts(jobPostArray)
+        jobPostArrayFiltered= jobPostArray //A: todos
+        showJobPosts(jobPostArrayFiltered)
     })
 }
 
@@ -182,55 +204,43 @@ createFilterLi = (key, data) => {
     filterUl.appendChild(li)
 }
 
+//CONSEJO: mantene una variable siempre con el mismo sentido, ej. jobPostArrayFiltered tiene SIEMPRE los posts "filtrados hasta ahora" que pueden ser todos ...
 
 updateJobsPosts = (key, data) => {
     let keyObject = key.substring(5) /*  role  = role-data  */
 
-    /* Verifico que jobPostArrayFiltered (array que contiene todos  los Posts Filtrados) este vacio. 
-    Si lo esta filtro  el jobPostArray que tiene todos los posts,
-    sino filtro el jobspostArrayfiltered*/
-    let jobPostArrayTemp = []
-
-    if (jobPostArrayFiltered.length === 0) {
-        jobPostArrayTemp = filterPost(jobPostArray, keyObject, data)
-    } else {
-        jobPostArrayTemp = filterPost(jobPostArrayFiltered, keyObject, data)
-    }
-
-    jobPostArrayFiltered.length = 0
-    jobPostArrayFiltered = [...jobPostArrayTemp]
+    jobPostArrayFiltered = filterPost(jobPostArrayFiltered, keyObject, data)
+		//A: filtro un poco mas los que ya tenia filtrados (que tal vez eran todos)
     showJobPosts(jobPostArrayFiltered)
-
 }
 
+//CONSEJO: a veces rinde que el switch devuelva la funcion que vas a usar, porque anda mas rapido y porque la podes probar aparte
+//U: devuevle una funcion para filtrar los posts con el criterio deseado o null
+filterPost_f = (key, data) => {
+		switch (key) {
+				case 'role':
+				case 'level':
+						return ((post) => (post[key] && post[key] === data));
+						break;
+				case 'skills':
+						return ((post) => (post[key].includes(data))); 
+						break;
+				default:
+						console.error('filterPost_f Unknown filter');
+						break;
+		}
+		return null;
+}
 
-
-filterPost = (array, key, data) => {
-    return array.filter(post => {
-        switch (key) {
-            case 'role':
-            case 'level':
-                if (post[key] && post[key] === data) {
-                    return true
-                }
-                break;
-            case 'skills':
-                if (post[key].includes(data)) {
-                    return true
-                }
-                break;
-            default:
-                break;
-        }
-    })
+filterPost = (jobPosts, key, data) => {
+		var filter_f= filterPost_f(key, data);
+		X= filter_f
+    return (filter_f==null ? jobPosts : jobPosts.filter(filter_f)) 
 }
 
 deleteFilter = (event) => {
-
-
-    let jobPostArrayTemp = []
     let skillsArray = []
-    let roleObjectFilter = ''
+    let roleObjectFilter
     let levelObjectFilter
 
     eraseFilterElement(event) /* ejemplo:   role, "frontend" */
@@ -250,68 +260,34 @@ deleteFilter = (event) => {
         }
     })
 
-    jobPostArrayTemp = jobPostArray.filter(post => {
-        let isRoleRequested = false
-        let isLevelRequested = false
-        let isSkillsRequested = false
-
-         if (roleObjectFilter) {
-            if (roleObjectFilter === post.role) {
-                isRoleRequested = true
-            }
-        } else {
-            isRoleRequested = true
-        }
-
-         if (levelObjectFilter) {
-            if (levelObjectFilter === post.level) {
-                isLevelRequested = true
-            }
-        } else {
-            isLevelRequested = true
-        }
-
-        if (skillsArray) {
-            if (skillsArray.every(skill => post.skills.includes(skill))) {
-                isSkillsRequested = true
-            }
-        } else {
-            isSkillsRequested = true
-        }
- 
-
-        if (isRoleRequested && isLevelRequested && isSkillsRequested) {
-             return true
-        }
+		//CONSEJO: las condiciones en un && u || se evaluan de izq a der, entonces te podes ahorrar evaluaciones si las escribis juntas asi, ademas se lee mejor
+    jobPostArrayFiltered= jobPostArray.filter(post => {
+				return (roleObjectFilter==null || roleObjectFilter === post.role)
+				       && (levelObjectFilter==null || levelObjectFilter === post.level) 
+				       && (skillsArray.length==0 || skillsArray.every(skill => post.skills.includes(skill))) 
     })
-    console.log(jobPostArrayTemp)
-    jobPostArrayFiltered.length = 0
-    jobPostArrayFiltered = [...jobPostArrayTemp]
 }
 
 
 
 
 eraseFilterElement = (event) => {
+		let e;
     switch (event.srcElement.tagName) {
         case 'path':
-            event.target.parentNode.parentNode.parentNode.remove()
-            data = event.target.parentNode.parentNode.parentNode.attributes[0].value
-            key = event.target.parentNode.parentNode.parentNode.attributes[0].name
+            e= event.target.parentNode.parentNode.parentNode
             break;
         case 'svg':
-            event.target.parentNode.parentNode.remove()
-            data = event.target.parentNode.parentNode.attributes[0].value
-            key = event.target.parentNode.parentNode.attributes[0].name
-
+            e= event.target.parentNode.parentNode
             break;
         case 'BUTTON':
-            event.target.parentNode.remove()
-            data = event.target.parentNode.attributes[0].value
-            key = event.target.parentNode.attributes[0].name
-            break;
-        default:
+            e= event.target.parentNode
             break;
     }
 
+		if (e!=null) {
+			e.remove()
+			data = e.attributes[0].value
+			key = e.attributes[0].name
+		}
 }
